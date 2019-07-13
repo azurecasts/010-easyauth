@@ -1,0 +1,53 @@
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+  <div class="container">
+    <div class="navbar-translate">
+      <a class="navbar-brand" href="/">
+        AzureCasts Episode #101 </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a href="https://github.com/azurecasts" class="nav-link">
+            <i class="fa fa-github"></i> Github
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="https://www.youtube.com/channel/UC70dLI0U5msNQvZ4vy_EcUA" class="nav-link">
+            <i class="fa fa-youtube"></i> YouTube
+          </a>
+        </li>
+        <%if(user.loggedIn){ %>
+          <li class="dropdown nav-item">
+            <a href="#" class="profile-photo nav-link" data-toggle="dropdown">
+              <div class="profile-photo-small">
+                <img src="" alt="Circle Image" class="rounded-circle img-fluid user-avatar">
+              </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+              <h6 id="user-name" class="dropdown-header"></h6>
+              <a href="/profile" class="dropdown-item">Profile</a>
+              <a href="#" class="dropdown-item">Orders</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a href="/.auth/logout?post_logout_redirect_uri=https://velzyapp.azurewebsites.net/logged-out" class="nav-link">
+              <i class="fa fa-user"></i> Logout
+            </a>
+          </li>
+        <%} else { %>
+        <li class="nav-item">
+          <a href="/login" class="btn btn-rose btn-raised btn-round  ">
+            <i class="fa fa-user"></i> Login
+          </a>
+        </li>
+        <%}%>
+      </ul>
+    </div>
+  </div>
+</nav>

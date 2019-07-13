@@ -1,0 +1,33 @@
+<h2>Login successful...</h2>
+<p>redirecting...</p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
+<script>
+const resolveLogin = async function(){
+  //reach out to /.auth/me for user info
+  const authMe = await axios.get("https://velzyapp.azurewebsites.net/.auth/me");
+  const settings = authMe.data[0];
+  let user = {
+    provider: settings.provider_name,
+    id: settings.user_id
+  }
+  const claims = {};
+  for(let i=0; i < settings.user_claims.length; i++){
+    const claim = settings.user_claims[i];
+    claims[claim.typ] = claim.val;
+  }
+  if(user.provider === "google"){
+    user.name = claims.name; 
+    user.avatar = claims.picture;
+  }else{
+    user.name = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]; 
+    user.avatar = claims["urn:twitter:profile_image_url_https"];
+  }
+  return user;
+}
+
+resolveLogin().then(user => {
+  window.location.replace(`/login-remember?name=${user.name}&avatar=${user.avatar}`);
+}).catch(err => {
+  console.log(err);
+})

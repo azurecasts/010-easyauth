@@ -1,0 +1,74 @@
+<footer class="footer footer-default">
+  <div class="container">
+    <nav class="float-left">
+      <ul>
+        <li>
+          <a href="https://azurecasts.com">
+            AzureCasts
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            About Us
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            Blog
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            Licenses
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="copyright float-right">
+      &copy;
+      <script>
+        document.write(new Date().getFullYear())
+      </script>, made using the Material Template <i class="material-icons">favorite</i> by
+      <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a>.
+    </div>
+  </div>
+</footer>
+<% if(user.loggedIn){ %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
+<script>
+const resolveLogin = async function(){
+  //reach out to /.auth/me for user info
+  const authMe = await axios.get("https://velzyapp.azurewebsites.net/.auth/me");
+  const settings = authMe.data[0];
+  let user = {
+    provider: settings.provider_name,
+    id: settings.user_id
+  }
+  const claims = {};
+  for(let i=0; i < settings.user_claims.length; i++){
+    const claim = settings.user_claims[i];
+    claims[claim.typ] = claim.val;
+  }
+  if(user.provider === "google"){
+    user.name = claims.name; 
+    user.avatar = claims.picture;
+  }else{
+    user.name = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]; 
+    user.avatar = claims["urn:twitter:profile_image_url_https"];
+  }
+  return user;
+}
+
+resolveLogin().then(user => {
+  //set the name and avatar
+  document.getElementById("user-name").innerText=user.name;
+  const imgs = document.getElementsByClassName("user-avatar");
+  for(img of imgs){
+    img.src = user.avatar;
+  }
+}).catch(err => {
+  console.log(err);
+})
+</script>
+
+<% } %>
